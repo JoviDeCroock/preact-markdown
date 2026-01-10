@@ -32,9 +32,9 @@ function App() {
   return (
     <Markdown>
       # Hello World
-      
+
       This is **markdown** content!
-      
+
       - Easy to use
       - Supports all markdown features
       - Built on remark/rehype
@@ -57,12 +57,12 @@ function App() {
   return (
     <Markdown remarkPlugins={[remarkGfm]}>
       ## Tables
-      
+
       | Feature | Supported |
       |---------|-----------|
       | Tables  | ✅        |
       | ~~Strike~~ | ✅        |
-      
+
       - [x] Task lists
       - [ ] More features
     </Markdown>
@@ -103,7 +103,7 @@ import 'highlight.js/styles/github-dark.css';
 
 function App() {
   return (
-    <Markdown 
+    <Markdown
       remarkPlugins={[remarkGfm, remarkMath]}
       rehypePlugins={[rehypeKatex, rehypeHighlight]}
     >
@@ -121,22 +121,22 @@ function App() {
 interface MarkdownProps {
   /** The markdown content to render */
   children: string;
-  
+
   /** Custom tag name for the wrapper element (default: 'div') */
   wrapper?: string;
-  
+
   /** Additional class name for the wrapper */
   className?: string;
-  
+
   /** Whether to sanitize HTML (recommended for user-generated content) */
   sanitize?: boolean | Schema;
-  
+
   /** Remark plugins to use for markdown processing */
   remarkPlugins?: Plugin[];
-  
+
   /** Rehype plugins to use for HTML processing */
   rehypePlugins?: Plugin[];
-  
+
   /** Additional remark-rehype options */
   remarkRehypeOptions?: Record<string, any>;
 }

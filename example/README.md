@@ -50,7 +50,7 @@ import rehypeKatex from 'rehype-katex';
 
 function App() {
   return (
-    <Markdown 
+    <Markdown
       remarkPlugins={[remarkGfm, remarkMath]}
       rehypePlugins={[rehypeKatex]}
     >
