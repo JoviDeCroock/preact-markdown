@@ -14,13 +14,13 @@ A lightweight markdown renderer for Preact applications built on the powerful [u
 ## Installation
 
 ```bash
-pnpm add preact-markdown unified remark-parse remark-rehype rehype-stringify rehype-sanitize
+pnpm add preact-markdown
 ```
 
 Or with npm:
 
 ```bash
-npm install preact-markdown unified remark-parse remark-rehype rehype-stringify rehype-sanitize
+npm install preact-markdown
 ```
 
 ## Basic Usage
