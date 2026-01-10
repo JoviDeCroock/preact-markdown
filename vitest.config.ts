@@ -4,6 +4,9 @@ import { playwright } from '@vitest/browser-playwright';
 
 export default defineConfig({
 	plugins: [preact()],
+	optimizeDeps: {
+		include: ['marked']
+	},
 	test: {
 		browser: {
 			enabled: true,

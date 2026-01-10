@@ -17,6 +17,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./lite": {
+      "types": "./dist/lite.d.ts",
+      "default": "./dist/lite.js"
     }
   },
   "main": "./dist/index.js",
@@ -59,6 +63,7 @@
   },
   "dependencies": {
     "hast-util-sanitize": "^5.0.2",
+    "marked": "^17.0.1",
     "rehype-sanitize": "^6.0.0",
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",

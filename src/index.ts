@@ -1,4 +1,4 @@
-import { type VNode, h, type ComponentType, type JSX } from 'preact';
+import { type VNode, h } from 'preact';
 import { useMemo } from 'preact/hooks';
 import { unified, type Plugin } from 'unified';
 import remarkParse from 'remark-parse';
@@ -6,35 +6,13 @@ import remarkRehype from 'remark-rehype';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import type { Schema } from 'hast-util-sanitize';
 import type { Root, Element, Text, RootContent } from 'hast';
-
-/**
- * Props passed to custom component renderers
- */
-export interface ComponentProps {
-	children?: VNode | VNode[] | string | null;
-	[key: string]: any;
-}
-
-/**
- * Map of element names to custom component renderers
- */
-export type Components = {
-	[K in keyof JSX.IntrinsicElements]?:
-		| ComponentType<ComponentProps>
-		| keyof JSX.IntrinsicElements;
-} & {
-	[key: string]: ComponentType<ComponentProps> | keyof JSX.IntrinsicElements;
-};
+import type { Components, Options } from './types';
 
 /**
  * Options for the Markdown component
  */
-export interface MarkdownOptions {
-	/** Custom tag name for the wrapper element (default: 'div') */
-	wrapper?: string;
-	/** Additional class name for the wrapper */
-	className?: string;
-	/** Whether to sanitize HTML (recommended for user-generated content) */
+export interface MarkdownOptions extends Options {
+	/** Whether to sanitize HTML */
 	sanitize?: boolean | Schema;
 	/** Remark plugins to use for markdown processing */
 	remarkPlugins?: Plugin[];
@@ -42,8 +20,6 @@ export interface MarkdownOptions {
 	rehypePlugins?: Plugin[];
 	/** Additional remark-rehype options */
 	remarkRehypeOptions?: Record<string, any>;
-	/** Custom components to use for rendering elements */
-	components?: Components;
 }
 
 /**
