@@ -19,7 +19,9 @@ export interface ComponentProps {
  * Map of element names to custom component renderers
  */
 export type Components = {
-	[K in keyof JSX.IntrinsicElements]?: ComponentType<ComponentProps> | keyof JSX.IntrinsicElements;
+	[K in keyof JSX.IntrinsicElements]?:
+		| ComponentType<ComponentProps>
+		| keyof JSX.IntrinsicElements;
 } & {
 	[key: string]: ComponentType<ComponentProps> | keyof JSX.IntrinsicElements;
 };
@@ -116,7 +118,9 @@ export interface MarkdownProps extends MarkdownOptions {
 /**
  * Convert HAST properties to Preact-compatible props
  */
-function hastPropsToPreact(properties: Record<string, any> = {}): Record<string, any> {
+function hastPropsToPreact(
+	properties: Record<string, any> = {}
+): Record<string, any> {
 	const props: Record<string, any> = {};
 
 	for (const [key, value] of Object.entries(properties)) {
@@ -168,7 +172,10 @@ function hastToPreact(
 /**
  * Convert a HAST tree to Preact VNodes
  */
-function hastTreeToPreact(tree: Root, components: Components): (VNode | string)[] {
+function hastTreeToPreact(
+	tree: Root,
+	components: Components
+): (VNode | string)[] {
 	return tree.children
 		.map((child, i) => hastToPreact(child, components, i))
 		.filter((child): child is VNode | string => child !== null);
@@ -182,11 +189,10 @@ export function Markdown({
 	remarkPlugins = [],
 	rehypePlugins = [],
 	remarkRehypeOptions = {},
-	components = {},
+	components = {}
 }: MarkdownProps): VNode {
 	const content = useMemo(() => {
-		let processor = unified()
-			.use(remarkParse);
+		let processor = unified().use(remarkParse);
 
 		// Apply remark plugins
 		for (const plugin of remarkPlugins) {
@@ -201,7 +207,10 @@ export function Markdown({
 		processor = processor.use(remarkRehype as any, remarkRehypeOptions);
 
 		if (sanitize) {
-			processor = processor.use(rehypeSanitize as any, sanitize === true ? defaultSchema : sanitize);
+			processor = processor.use(
+				rehypeSanitize as any,
+				sanitize === true ? defaultSchema : sanitize
+			);
 		}
 
 		// Apply rehype plugins
@@ -215,7 +224,14 @@ export function Markdown({
 
 		const tree = processor.runSync(processor.parse(children));
 		return hastTreeToPreact(tree as Root, components);
-	}, [children, sanitize, remarkPlugins, rehypePlugins, remarkRehypeOptions, components]);
+	}, [
+		children,
+		sanitize,
+		remarkPlugins,
+		rehypePlugins,
+		remarkRehypeOptions,
+		components
+	]);
 
 	return h(wrapper, { className }, ...content);
 }

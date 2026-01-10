@@ -35,9 +35,7 @@ describe('Markdown', () => {
 			const container = document.createElement('div');
 			document.body.appendChild(container);
 			render(
-				<Markdown>
-					This is **bold** and this is *italic*.
-				</Markdown>,
+				<Markdown>This is **bold** and this is *italic*.</Markdown>,
 				container
 			);
 
@@ -78,10 +76,7 @@ const x = 42;
 		it('renders inline code', () => {
 			const container = document.createElement('div');
 			document.body.appendChild(container);
-			render(
-				<Markdown>This is `inline code` here.</Markdown>,
-				container
-			);
+			render(<Markdown>This is `inline code` here.</Markdown>, container);
 
 			const code = container.querySelector('code');
 			expect(code).toBeTruthy();
@@ -109,10 +104,7 @@ const x = 42;
 		it('renders blockquotes', () => {
 			const container = document.createElement('div');
 			document.body.appendChild(container);
-			render(
-				<Markdown>{'> This is a quote'}</Markdown>,
-				container
-			);
+			render(<Markdown>{'> This is a quote'}</Markdown>, container);
 
 			const blockquote = container.querySelector('blockquote');
 			expect(blockquote).toBeTruthy();
@@ -124,10 +116,7 @@ const x = 42;
 		it('applies custom className', () => {
 			const container = document.createElement('div');
 			document.body.appendChild(container);
-			render(
-				<Markdown className="custom-class">Hello</Markdown>,
-				container
-			);
+			render(<Markdown className="custom-class">Hello</Markdown>, container);
 
 			expect(container.querySelector('.custom-class')).toBeTruthy();
 		});
@@ -135,10 +124,7 @@ const x = 42;
 		it('uses custom wrapper element', () => {
 			const container = document.createElement('div');
 			document.body.appendChild(container);
-			render(
-				<Markdown wrapper="section">Hello</Markdown>,
-				container
-			);
+			render(<Markdown wrapper="section">Hello</Markdown>, container);
 
 			expect(container.querySelector('section')).toBeTruthy();
 		});
@@ -158,9 +144,7 @@ const x = 42;
 			const container = document.createElement('div');
 			document.body.appendChild(container);
 			render(
-				<Markdown>
-					{'[Click me](javascript:alert("xss"))'}
-				</Markdown>,
+				<Markdown>{'[Click me](javascript:alert("xss"))'}</Markdown>,
 				container
 			);
 
@@ -168,7 +152,9 @@ const x = 42;
 			expect(link).toBeTruthy();
 			// The href should be removed (null) or empty when sanitized
 			const href = link?.getAttribute('href');
-			expect(href === null || href === '' || !href.includes('javascript:')).toBe(true);
+			expect(
+				href === null || href === '' || !href.includes('javascript:')
+			).toBe(true);
 		});
 
 		it('allows safe protocols in links', () => {
@@ -204,7 +190,9 @@ const x = 42;
 			// Image should exist but src should be removed (null) or sanitized
 			if (img) {
 				const src = img.getAttribute('src');
-				expect(src === null || src === '' || !src.includes('data:text/html')).toBe(true);
+				expect(
+					src === null || src === '' || !src.includes('data:text/html')
+				).toBe(true);
 			}
 		});
 
@@ -212,9 +200,7 @@ const x = 42;
 			const container = document.createElement('div');
 			document.body.appendChild(container);
 			render(
-				<Markdown>
-					{'![alt text](https://example.com/image.png)'}
-				</Markdown>,
+				<Markdown>{'![alt text](https://example.com/image.png)'}</Markdown>,
 				container
 			);
 
@@ -245,12 +231,12 @@ A paragraph with **bold** and *italic* text.`}
 		it('can use custom sanitization schema', () => {
 			const container = document.createElement('div');
 			document.body.appendChild(container);
-			
+
 			// Custom schema that removes all links
 			const customSchema = {
-				tagNames: ['p', 'strong', 'em'],
+				tagNames: ['p', 'strong', 'em']
 			};
-			
+
 			render(
 				<Markdown sanitize={customSchema}>
 					{'This has a [link](https://example.com) and **bold** text.'}
@@ -356,10 +342,7 @@ const x = 42;
 			const container = document.createElement('div');
 			document.body.appendChild(container);
 			render(
-				<Markdown
-					remarkPlugins={[remarkGfm]}
-					rehypePlugins={[rehypeHighlight]}
-				>
+				<Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]}>
 					{`## Table
 
 | Column 1 | Column 2 |
@@ -396,7 +379,7 @@ const greeting: string = "Hello";
 			render(
 				<Markdown
 					components={{
-						p: ({ children }) => <p class="custom-paragraph">{children}</p>,
+						p: ({ children }) => <p class="custom-paragraph">{children}</p>
 					}}
 				>
 					This is a paragraph.
@@ -420,7 +403,7 @@ const greeting: string = "Hello";
 							<a href={href} class="custom-link" target="_blank" rel="noopener">
 								{children}
 							</a>
-						),
+						)
 					}}
 				>
 					[Click here](https://example.com)
@@ -443,7 +426,7 @@ const greeting: string = "Hello";
 				<Markdown
 					components={{
 						h1: ({ children }) => <h1 class="title">{children}</h1>,
-						h2: ({ children }) => <h2 class="subtitle">{children}</h2>,
+						h2: ({ children }) => <h2 class="subtitle">{children}</h2>
 					}}
 				>
 					{`# Main Title
@@ -467,7 +450,7 @@ const greeting: string = "Hello";
 						pre: ({ children }) => <pre class="code-block">{children}</pre>,
 						code: ({ className, children }) => (
 							<code class={`${className || ''} highlighted`}>{children}</code>
-						),
+						)
 					}}
 				>
 					{`\`\`\`js
@@ -490,7 +473,7 @@ const x = 1;
 				<Markdown
 					components={{
 						ul: ({ children }) => <ul class="custom-list">{children}</ul>,
-						li: ({ children }) => <li class="custom-item">{children}</li>,
+						li: ({ children }) => <li class="custom-item">{children}</li>
 					}}
 				>
 					{`- Item 1
@@ -513,7 +496,7 @@ const x = 1;
 				<Markdown
 					components={{
 						strong: 'b',
-						em: 'i',
+						em: 'i'
 					}}
 				>
 					This is **bold** and *italic*.
@@ -537,7 +520,7 @@ const x = 1;
 							<a href={href} data-custom="true" {...props}>
 								{children}
 							</a>
-						),
+						)
 					}}
 				>
 					[Link](https://example.com)
@@ -560,9 +543,7 @@ const x = 1;
 						table: ({ children }) => (
 							<table class="styled-table">{children}</table>
 						),
-						del: ({ children }) => (
-							<span class="strikethrough">{children}</span>
-						),
+						del: ({ children }) => <span class="strikethrough">{children}</span>
 					}}
 				>
 					{`| A | B |

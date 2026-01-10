@@ -5,6 +5,6 @@ export default defineConfig({
 	plugins: [preact()],
 	root: '.',
 	build: {
-		outDir: 'dist',
-	},
+		outDir: 'dist'
+	}
 });

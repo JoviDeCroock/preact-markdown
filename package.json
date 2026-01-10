@@ -12,10 +12,7 @@
   "bugs": {
     "url": "https://github.com/JoviDeCroock/preact-markdown/issues"
   },
-  "keywords": [
-    "preact",
-    "vitest"
-  ],
+  "keywords": ["preact", "vitest"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -26,13 +23,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "packageManager": "pnpm@10.21.0",
-  "files": [
-    "dist",
-    "src",
-    "CHANGELOG.md",
-    "README.md",
-    "LICENSE"
-  ],
+  "files": ["dist", "src", "CHANGELOG.md", "README.md", "LICENSE"],
   "scripts": {
     "prepublishOnly": "pnpm build && pnpm vitest run",
     "build": "tsup",

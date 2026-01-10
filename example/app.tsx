@@ -39,12 +39,11 @@ function hello(name) {
 
 			{/* GitHub Flavored Markdown */}
 			<div class="example">
-				<div class="example-header">GitHub Flavored Markdown (with remark-gfm)</div>
+				<div class="example-header">
+					GitHub Flavored Markdown (with remark-gfm)
+				</div>
 				<div class="example-content">
-					<Markdown
-						className="markdown-content"
-						remarkPlugins={[remarkGfm]}
-					>
+					<Markdown className="markdown-content" remarkPlugins={[remarkGfm]}>
 						{`## Tables
 
 | Feature | Supported | Notes |
@@ -74,7 +73,9 @@ Check out www.preactjs.com or https://github.com/preactjs/preact`}
 
 			{/* Syntax Highlighting */}
 			<div class="example">
-				<div class="example-header">Syntax Highlighting (with rehype-highlight)</div>
+				<div class="example-header">
+					Syntax Highlighting (with rehype-highlight)
+				</div>
 				<div class="example-content">
 					<Markdown
 						className="markdown-content"

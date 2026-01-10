@@ -10,7 +10,7 @@ export default defineConfig({
 	root: 'example',
 	resolve: {
 		alias: {
-			'preact-markdown': path.resolve(__dirname, 'src/index.ts'),
-		},
-	},
+			'preact-markdown': path.resolve(__dirname, 'src/index.ts')
+		}
+	}
 });
