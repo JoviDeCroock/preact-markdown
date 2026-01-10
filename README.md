@@ -1,5 +1,7 @@
 # preact-markdown
 
+[![npm](https://img.shields.io/npm/v/preact.svg)](https://www.npmjs.com/package/preact-md)
+
 A lightweight markdown renderer for Preact applications built on the powerful [unified](https://unifiedjs.com/) ecosystem (remark/rehype).
 
 ## Features
