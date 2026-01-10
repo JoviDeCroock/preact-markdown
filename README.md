@@ -1,4 +1,4 @@
-# preact-markdown
+# preact-md
 
 [![npm](https://img.shields.io/npm/v/preact-md.svg)](https://www.npmjs.com/package/preact-md)
 
@@ -14,19 +14,19 @@ A lightweight markdown renderer for Preact applications built on the powerful [u
 ## Installation
 
 ```bash
-pnpm add preact-markdown
+pnpm add preact-md
 ```
 
 Or with npm:
 
 ```bash
-npm install preact-markdown
+npm install preact-md
 ```
 
 ## Basic Usage
 
 ```tsx
-import { Markdown } from 'preact-markdown';
+import { Markdown } from 'preact-md';
 
 function App() {
   return (
@@ -45,12 +45,12 @@ function App() {
 
 ## Usage with Plugins
 
-The real power of `preact-markdown` comes from the remark/rehype plugin ecosystem:
+The real power of `preact-md` comes from the remark/rehype plugin ecosystem:
 
 ### GitHub Flavored Markdown
 
 ```tsx
-import { Markdown } from 'preact-markdown';
+import { Markdown } from 'preact-md';
 import remarkGfm from 'remark-gfm';
 
 function App() {
@@ -73,7 +73,7 @@ function App() {
 ### Syntax Highlighting
 
 ```tsx
-import { Markdown } from 'preact-markdown';
+import { Markdown } from 'preact-md';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github-dark.css';
 
@@ -93,7 +93,7 @@ function App() {
 ### Multiple Plugins
 
 ```tsx
-import { Markdown } from 'preact-markdown';
+import { Markdown } from 'preact-md';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -162,7 +162,7 @@ interface MarkdownProps {
 You can customize how markdown elements are rendered using the `components` prop:
 
 ```tsx
-import { Markdown } from 'preact-markdown';
+import { Markdown } from 'preact-md';
 
 function App() {
   return (
@@ -213,7 +213,7 @@ You can also replace elements with different HTML tags:
 Custom components work seamlessly with plugins:
 
 ```tsx
-import { Markdown } from 'preact-markdown';
+import { Markdown } from 'preact-md';
 import remarkGfm from 'remark-gfm';
 
 function App() {
@@ -249,7 +249,7 @@ function App() {
 
 ## Security
 
-By default, `preact-markdown` sanitizes HTML content using [`rehype-sanitize`](https://github.com/rehypejs/rehype-sanitize) to prevent XSS attacks. This is especially important when rendering user-generated content.
+By default, `preact-md` sanitizes HTML content using [`rehype-sanitize`](https://github.com/rehypejs/rehype-sanitize) to prevent XSS attacks. This is especially important when rendering user-generated content.
 
 To disable sanitization (not recommended):
 
