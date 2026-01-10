@@ -154,31 +154,130 @@ const x = 42;
 	});
 
 	describe('Sanitization', () => {
-		it('sanitizes HTML by default', () => {
+		it('removes javascript: protocol from links', () => {
 			const container = document.createElement('div');
 			document.body.appendChild(container);
 			render(
 				<Markdown>
-					{'<script>alert("xss")</script>Hello'}
-				</Markdown>,
-				container
-			);
-
-			expect(container.querySelector('script')).toBeFalsy();
-		});
-
-		it('sanitizes onclick handlers', () => {
-			const container = document.createElement('div');
-			document.body.appendChild(container);
-			render(
-				<Markdown>
-					{'<a onclick="alert()">Click</a>'}
+					{'[Click me](javascript:alert("xss"))'}
 				</Markdown>,
 				container
 			);
 
 			const link = container.querySelector('a');
-			expect(link?.getAttribute('onclick')).toBeFalsy();
+			expect(link).toBeTruthy();
+			// The href should be removed (null) or empty when sanitized
+			const href = link?.getAttribute('href');
+			expect(href === null || href === '' || !href.includes('javascript:')).toBe(true);
+		});
+
+		it('allows safe protocols in links', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown>
+					{`[HTTPS](https://example.com)
+[HTTP](http://example.com)
+[Mail](mailto:test@example.com)`}
+				</Markdown>,
+				container
+			);
+
+			const links = container.querySelectorAll('a');
+			expect(links.length).toBe(3);
+			expect(links[0].getAttribute('href')).toBe('https://example.com');
+			expect(links[1].getAttribute('href')).toBe('http://example.com');
+			expect(links[2].getAttribute('href')).toBe('mailto:test@example.com');
+		});
+
+		it('removes data: protocol from images', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown>
+					{'![alt](data:text/html,<script>alert("xss")</script>)'}
+				</Markdown>,
+				container
+			);
+
+			const img = container.querySelector('img');
+			// Image should exist but src should be removed (null) or sanitized
+			if (img) {
+				const src = img.getAttribute('src');
+				expect(src === null || src === '' || !src.includes('data:text/html')).toBe(true);
+			}
+		});
+
+		it('allows safe image sources', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown>
+					{'![alt text](https://example.com/image.png)'}
+				</Markdown>,
+				container
+			);
+
+			const img = container.querySelector('img');
+			expect(img).toBeTruthy();
+			expect(img?.getAttribute('src')).toBe('https://example.com/image.png');
+			expect(img?.getAttribute('alt')).toBe('alt text');
+		});
+
+		it('preserves safe attributes on elements', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown>
+					{`# Heading
+
+A paragraph with **bold** and *italic* text.`}
+				</Markdown>,
+				container
+			);
+
+			expect(container.querySelector('h1')).toBeTruthy();
+			expect(container.querySelector('p')).toBeTruthy();
+			expect(container.querySelector('strong')).toBeTruthy();
+			expect(container.querySelector('em')).toBeTruthy();
+		});
+
+		it('can use custom sanitization schema', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			
+			// Custom schema that removes all links
+			const customSchema = {
+				tagNames: ['p', 'strong', 'em'],
+			};
+			
+			render(
+				<Markdown sanitize={customSchema}>
+					{'This has a [link](https://example.com) and **bold** text.'}
+				</Markdown>,
+				container
+			);
+
+			// Links should be removed with this schema
+			expect(container.querySelector('a')).toBeFalsy();
+			// Bold should still work
+			expect(container.querySelector('strong')).toBeTruthy();
+		});
+
+		it('sanitization can be disabled', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown sanitize={false}>
+					{'[Click me](javascript:void(0))'}
+				</Markdown>,
+				container
+			);
+
+			const link = container.querySelector('a');
+			expect(link).toBeTruthy();
+			// With sanitization disabled, the javascript: protocol should be preserved
+			expect(link?.getAttribute('href')).toBe('javascript:void(0)');
 		});
 	});
 

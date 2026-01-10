@@ -200,10 +200,8 @@ export function Markdown({
 		// Convert markdown to HAST
 		processor = processor.use(remarkRehype as any, remarkRehypeOptions);
 
-		// Apply sanitization if enabled
 		if (sanitize) {
-			const schema = sanitize === true ? defaultSchema : sanitize;
-			processor = processor.use(rehypeSanitize as any, schema);
+			processor = processor.use(rehypeSanitize as any, sanitize === true ? defaultSchema : sanitize);
 		}
 
 		// Apply rehype plugins
