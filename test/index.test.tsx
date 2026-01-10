@@ -289,4 +289,197 @@ const greeting: string = "Hello";
 			expect(code?.className).toContain('language-typescript');
 		});
 	});
+
+	describe('Custom Components', () => {
+		it('renders paragraph with custom component', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown
+					components={{
+						p: ({ children }) => <p class="custom-paragraph">{children}</p>,
+					}}
+				>
+					This is a paragraph.
+				</Markdown>,
+				container
+			);
+
+			const p = container.querySelector('p');
+			expect(p).toBeTruthy();
+			expect(p?.className).toBe('custom-paragraph');
+			expect(p?.textContent).toBe('This is a paragraph.');
+		});
+
+		it('renders links with custom component', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown
+					components={{
+						a: ({ href, children }) => (
+							<a href={href} class="custom-link" target="_blank" rel="noopener">
+								{children}
+							</a>
+						),
+					}}
+				>
+					[Click here](https://example.com)
+				</Markdown>,
+				container
+			);
+
+			const link = container.querySelector('a');
+			expect(link).toBeTruthy();
+			expect(link?.className).toBe('custom-link');
+			expect(link?.getAttribute('target')).toBe('_blank');
+			expect(link?.getAttribute('rel')).toBe('noopener');
+			expect(link?.getAttribute('href')).toBe('https://example.com');
+		});
+
+		it('renders headers with custom component', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown
+					components={{
+						h1: ({ children }) => <h1 class="title">{children}</h1>,
+						h2: ({ children }) => <h2 class="subtitle">{children}</h2>,
+					}}
+				>
+					{`# Main Title
+## Sub Title`}
+				</Markdown>,
+				container
+			);
+
+			const h1 = container.querySelector('h1');
+			const h2 = container.querySelector('h2');
+			expect(h1?.className).toBe('title');
+			expect(h2?.className).toBe('subtitle');
+		});
+
+		it('renders code blocks with custom component', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown
+					components={{
+						pre: ({ children }) => <pre class="code-block">{children}</pre>,
+						code: ({ className, children }) => (
+							<code class={`${className || ''} highlighted`}>{children}</code>
+						),
+					}}
+				>
+					{`\`\`\`js
+const x = 1;
+\`\`\``}
+				</Markdown>,
+				container
+			);
+
+			const pre = container.querySelector('pre');
+			const code = container.querySelector('code');
+			expect(pre?.className).toBe('code-block');
+			expect(code?.className).toContain('highlighted');
+		});
+
+		it('renders lists with custom components', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown
+					components={{
+						ul: ({ children }) => <ul class="custom-list">{children}</ul>,
+						li: ({ children }) => <li class="custom-item">{children}</li>,
+					}}
+				>
+					{`- Item 1
+- Item 2`}
+				</Markdown>,
+				container
+			);
+
+			const ul = container.querySelector('ul');
+			const items = container.querySelectorAll('li');
+			expect(ul?.className).toBe('custom-list');
+			expect(items.length).toBe(2);
+			expect(items[0].className).toBe('custom-item');
+		});
+
+		it('can replace element with different tag', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown
+					components={{
+						strong: 'b',
+						em: 'i',
+					}}
+				>
+					This is **bold** and *italic*.
+				</Markdown>,
+				container
+			);
+
+			expect(container.querySelector('b')).toBeTruthy();
+			expect(container.querySelector('i')).toBeTruthy();
+			expect(container.querySelector('strong')).toBeFalsy();
+			expect(container.querySelector('em')).toBeFalsy();
+		});
+
+		it('passes through original props to custom component', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown
+					components={{
+						a: ({ href, children, ...props }) => (
+							<a href={href} data-custom="true" {...props}>
+								{children}
+							</a>
+						),
+					}}
+				>
+					[Link](https://example.com)
+				</Markdown>,
+				container
+			);
+
+			const link = container.querySelector('a');
+			expect(link?.getAttribute('href')).toBe('https://example.com');
+			expect(link?.getAttribute('data-custom')).toBe('true');
+		});
+
+		it('works with plugins and custom components together', () => {
+			const container = document.createElement('div');
+			document.body.appendChild(container);
+			render(
+				<Markdown
+					remarkPlugins={[remarkGfm]}
+					components={{
+						table: ({ children }) => (
+							<table class="styled-table">{children}</table>
+						),
+						del: ({ children }) => (
+							<span class="strikethrough">{children}</span>
+						),
+					}}
+				>
+					{`| A | B |
+|---|---|
+| 1 | 2 |
+
+~~deleted~~`}
+				</Markdown>,
+				container
+			);
+
+			const table = container.querySelector('table');
+			const del = container.querySelector('.strikethrough');
+			expect(table?.className).toBe('styled-table');
+			expect(del).toBeTruthy();
+			expect(del?.textContent).toBe('deleted');
+		});
+	});
 });
