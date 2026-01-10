@@ -139,6 +139,9 @@ interface MarkdownProps {
 
   /** Additional remark-rehype options */
   remarkRehypeOptions?: Record<string, any>;
+
+  /** Custom components to use for rendering elements */
+  components?: Components;
 }
 ```
 
@@ -152,23 +155,97 @@ interface MarkdownProps {
 - **`remarkPlugins`**: Array of remark plugins to transform markdown
 - **`rehypePlugins`**: Array of rehype plugins to transform HTML
 - **`remarkRehypeOptions`**: Additional options for the markdown-to-HTML conversion
+- **`components`**: Custom components to override default element rendering
+
+## Custom Components
+
+You can customize how markdown elements are rendered using the `components` prop:
+
+```tsx
+import { Markdown } from 'preact-markdown';
+
+function App() {
+  return (
+    <Markdown
+      components={{
+        // Custom paragraph with styling
+        p: ({ children }) => <p class="my-paragraph">{children}</p>,
+        
+        // Custom links that open in new tab
+        a: ({ href, children }) => (
+          <a href={href} class="custom-link" target="_blank" rel="noopener">
+            {children}
+          </a>
+        ),
+        
+        // Custom headings
+        h1: ({ children }) => <h1 class="title">{children}</h1>,
+        h2: ({ children }) => <h2 class="subtitle">{children}</h2>,
+        
+        // Custom code blocks
+        pre: ({ children }) => <pre class="code-block">{children}</pre>,
+        code: ({ className, children }) => (
+          <code class={`${className || ''} highlighted`}>{children}</code>
+        ),
+      }}
+    >
+      # Hello World
+      
+      This is a paragraph with a [link](https://example.com).
+    </Markdown>
+  );
+}
+```
+
+You can also replace elements with different HTML tags:
+
+```tsx
+<Markdown
+  components={{
+    strong: 'b',  // Replace <strong> with <b>
+    em: 'i',      // Replace <em> with <i>
+  }}
+>
+  This is **bold** and *italic*.
+</Markdown>
+```
+
+Custom components work seamlessly with plugins:
+
+```tsx
+import { Markdown } from 'preact-markdown';
+import remarkGfm from 'remark-gfm';
+
+function App() {
+  return (
+    <Markdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        table: ({ children }) => (
+          <table class="styled-table">{children}</table>
+        ),
+        del: ({ children }) => (
+          <span class="strikethrough">{children}</span>
+        ),
+      }}
+    >
+      | Column A | Column B |
+      |----------|----------|
+      | Value 1  | Value 2  |
+      
+      ~~deleted text~~
+    </Markdown>
+  );
+}
+```
 
 ## Popular Plugins
 
-### Remark Plugins (Markdown Processing)
-
 - [`remark-gfm`](https://github.com/remarkjs/remark-gfm) - GitHub Flavored Markdown support
 - [`remark-math`](https://github.com/remarkjs/remark-math) - Math equation support
-- [`remark-emoji`](https://github.com/remarkjs/remark-emoji) - Emoji shortcodes
 - [`remark-toc`](https://github.com/remarkjs/remark-toc) - Table of contents generation
-
-### Rehype Plugins (HTML Processing)
-
 - [`rehype-highlight`](https://github.com/rehypejs/rehype-highlight) - Syntax highlighting with highlight.js
 - [`rehype-prism`](https://github.com/mapbox/rehype-prism) - Syntax highlighting with Prism
-- [`rehype-slug`](https://github.com/rehypejs/rehype-slug) - Add IDs to headings
-- [`rehype-autolink-headings`](https://github.com/rehypejs/rehype-autolink-headings) - Add links to headings
-- [`rehype-sanitize`](https://github.com/rehypejs/rehype-sanitize) - Sanitize HTML (included by default)
 
 ## Security
 
@@ -195,57 +272,6 @@ const customSchema = {
 <Markdown sanitize={customSchema}>
   Your markdown here
 </Markdown>
-```
-
-## Examples
-
-Check out the [example folder](./example) for a complete working demo with:
-
-- Basic markdown rendering
-- GitHub Flavored Markdown (tables, task lists, strikethrough)
-- Syntax highlighting
-- Combined features
-
-To run the examples:
-
-```bash
-pnpm install
-pnpm dev
-```
-
-Then open http://localhost:5173 in your browser.
-
-## Comparison with react-markdown
-
-`preact-markdown` is inspired by [`react-markdown`](https://github.com/remarkjs/react-markdown) but designed specifically for Preact:
-
-| Feature | preact-markdown | react-markdown |
-|---------|----------------|----------------|
-| Framework | Preact | React |
-| Plugin System | ✅ remark/rehype | ✅ remark/rehype |
-| Sanitization | ✅ Default enabled | ✅ Default enabled |
-| Bundle Size | Smaller | Larger |
-
-## Development
-
-```bash
-# Install dependencies
-pnpm install
-
-# Build the library
-pnpm build
-
-# Run tests
-pnpm test
-
-# Run examples
-pnpm dev
-
-# Lint code
-pnpm lint
-
-# Format code
-pnpm format
 ```
 
 ## License
