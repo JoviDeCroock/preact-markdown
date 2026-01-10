@@ -10,8 +10,6 @@ A lightweight markdown renderer for Preact applications built on the powerful [u
 - 🔌 **Plugin Support** - Full access to remark and rehype plugins
 - 🛡️ **Secure by Default** - Built-in HTML sanitization to prevent XSS
 - 🎨 **Flexible** - Customize wrapper element and styling
-- 📦 **Lightweight** - Minimal bundle size
-- ⚡ **Fast** - Powered by unified's highly optimized parser
 
 ## Installation
 
