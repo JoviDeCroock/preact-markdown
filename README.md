@@ -10,6 +10,7 @@ A lightweight markdown renderer for Preact applications built on the powerful [u
 - 🔌 **Plugin Support** - Full access to remark and rehype plugins
 - 🛡️ **Secure by Default** - Built-in HTML sanitization to prevent XSS
 - 🎨 **Flexible** - Customize wrapper element and styling
+- 📦 **Lite Mode** - Smaller bundle option using [marked](https://marked.js.org/) (~12KB vs ~28KB)
 
 ## Installation
 
@@ -85,29 +86,6 @@ function App() {
         console.log(\`Hello, \${name}!\`);
       }
       \`\`\`}
-    </Markdown>
-  );
-}
-```
-
-### Multiple Plugins
-
-```tsx
-import { Markdown } from 'preact-md';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import rehypeHighlight from 'rehype-highlight';
-import 'katex/dist/katex.min.css';
-import 'highlight.js/styles/github-dark.css';
-
-function App() {
-  return (
-    <Markdown
-      remarkPlugins={[remarkGfm, remarkMath]}
-      rehypePlugins={[rehypeKatex, rehypeHighlight]}
-    >
-      Your markdown with $\\LaTeX$ math and code highlighting!
     </Markdown>
   );
 }
@@ -246,6 +224,84 @@ function App() {
 - [`remark-toc`](https://github.com/remarkjs/remark-toc) - Table of contents generation
 - [`rehype-highlight`](https://github.com/rehypejs/rehype-highlight) - Syntax highlighting with highlight.js
 - [`rehype-prism`](https://github.com/mapbox/rehype-prism) - Syntax highlighting with Prism
+
+## Lite Mode
+
+For applications where bundle size is critical, `preact-md` offers a lite version that uses [marked](https://marked.js.org/) instead of the unified ecosystem.
+
+### Basic Usage (Lite)
+
+```tsx
+import { Markdown } from 'preact-md/lite';
+
+function App() {
+  return (
+    <Markdown>
+      # Hello World
+
+      This is **markdown** with GFM support built-in!
+
+      | Feature | Supported |
+      |---------|-----------|
+      | Tables  | ✅        |
+      | ~~Strike~~ | ✅     |
+
+      - [x] Task lists work too
+    </Markdown>
+  );
+}
+```
+
+### Lite Mode Props
+
+```typescript
+interface MarkdownProps {
+  /** The markdown content to render */
+  children: string;
+
+  /** Custom tag name for the wrapper element (default: 'div') */
+  wrapper?: string;
+
+  /** Additional class name for the wrapper */
+  className?: string;
+
+  /** Whether to sanitize HTML (default: true) */
+  sanitize?: boolean;
+
+  /** Marked options for markdown processing */
+  markedOptions?: MarkedOptions;
+
+  /** Marked extensions for extending functionality */
+  extensions?: MarkedExtension[];
+
+  /** Custom components to use for rendering elements */
+  components?: Components;
+}
+```
+
+### With Marked Extensions
+
+```tsx
+import { Markdown } from 'preact-md/lite';
+import { gfmHeadingId } from 'marked-gfm-heading-id';
+
+function App() {
+  return (
+    <Markdown extensions={[gfmHeadingId()]}>
+      # Heading with ID
+    </Markdown>
+  );
+}
+```
+
+### Trade-offs
+
+| Feature | Full Version | Lite Version |
+|---------|--------------|--------------|
+| GFM support | Via `remark-gfm` plugin | Built-in |
+| Plugin ecosystem | remark/rehype (extensive) | marked extensions |
+| Sanitization | Full (rehype-sanitize) | Basic (script/iframe filtering) |
+| AST access | Yes (HAST/MDAST) | No |
 
 ## Security
 

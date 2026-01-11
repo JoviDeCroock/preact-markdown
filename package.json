@@ -1,7 +1,7 @@
 {
   "name": "preact-md",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Render markdown in Preact applications with ease.",
   "license": "MIT",
   "homepage": "https://github.com/JoviDeCroock/preact-markdown#readme",
