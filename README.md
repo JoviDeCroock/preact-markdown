@@ -341,6 +341,7 @@ Built with:
 - [unified](https://unifiedjs.com/) - Interface for processing text with syntax trees
 - [remark](https://github.com/remarkjs/remark) - Markdown processor
 - [rehype](https://github.com/rehypejs/rehype) - HTML processor
+- [rehype](https://github.com/markedjs/marked) - Markdown parser/compiler
 - [Preact](https://preactjs.com/) - Fast 3kB alternative to React
 
 Inspired by [react-markdown](https://github.com/remarkjs/react-markdown).
