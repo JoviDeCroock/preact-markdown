@@ -1,6 +1,6 @@
 import { type VNode, h } from 'preact';
 import { useMemo } from 'preact/hooks';
-import { unified, type Plugin } from 'unified';
+import { unified, type PluggableList } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
@@ -15,9 +15,9 @@ export interface MarkdownOptions extends Options {
 	/** Whether to sanitize HTML */
 	sanitize?: boolean | Schema;
 	/** Remark plugins to use for markdown processing */
-	remarkPlugins?: Plugin[];
+	remarkPlugins?: PluggableList;
 	/** Rehype plugins to use for HTML processing */
-	rehypePlugins?: Plugin[];
+	rehypePlugins?: PluggableList;
 	/** Additional remark-rehype options */
 	remarkRehypeOptions?: Record<string, any>;
 }
